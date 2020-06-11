@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import Contacts from "../contacts/contacts";
 import ContactForm from "../contacts/ContactForm";
 import ContactFilter from "../contacts/contactFilter.jsx";
@@ -6,6 +6,9 @@ import AuthContext from "../../context/auth/AuthContext";
 
 const Home = () => {
   const authContext = useContext(AuthContext);
+  useEffect(() => {
+    authContext.loadUser();
+  }, []);
   return (
     <div className="grid-2">
       <div>

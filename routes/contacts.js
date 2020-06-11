@@ -22,18 +22,19 @@ router.route("/").get(auth, async (req, res) => {
         return res.status(400).json({
             errors: errors.array()
         })
+    console.log(req.body)
     const {
         name,
         email,
         phone,
-        type
+        types
     } = req.body
     try {
         const newContact = new Contact({
             name,
             email,
             phone,
-            type,
+            types,
             user: req.user.id
         })
         console.log(newContact)

@@ -10,12 +10,15 @@ const ContactSchema = new Schema({
         required: true
     },
     email: {
-        type: "String",
+        type: String,
         required: true
     },
     phone: {
         type: String,
         default: "Personal"
+    },
+    types: {
+        type: String
     },
     date: {
         type: Date,

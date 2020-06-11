@@ -37,6 +37,7 @@ const ContatctForm = () => {
     e.preventDefault();
     if (current == null) {
       addContact(contact);
+      console.log(contact);
     } else {
       updateContact(contact);
     }
