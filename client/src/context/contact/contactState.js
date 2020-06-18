@@ -20,12 +20,11 @@ import {
 } from "../Types"
 const ContactState = (props) => {
     const initialState = {
-        contacts: [
-
-        ],
+        contacts: [],
         current: null,
         filtered: null,
-        error: null
+        error: null,
+        loading: false
     }
     const [state, dispatch] = useReducer(contactReducer, initialState);
     //Add Contacts
@@ -70,11 +69,23 @@ const ContactState = (props) => {
     }
 
     //Delete Contacts
-    const deleteContact = id => {
-
+    const deleteContact = async id => {
+        try {
+            await Axios.delete("/api/contacts/" + id);
+            dispatch({
+                type: DELETE_CONTACT,
+                payload: id
+            });
+        } catch (error) {
+            dispatch({
+                type: " CONTACT_ERROR",
+                payload: error.response.msg
+            })
+        }
+    }
+    const clearContacts = () => {
         dispatch({
-            type: DELETE_CONTACT,
-            payload: id
+            type: CLEAR_CONTACTS
         })
     }
 
@@ -89,11 +100,27 @@ const ContactState = (props) => {
             type: CLEAR_CURRENT
         })
     }
-    const updateContact = (contact) => {
-        dispatch({
-            type: UPDATE_CONTACT,
-            payload: contact
-        })
+    const updateContact = async (contact) => {
+        const config = {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }
+        try {
+            const res = await Axios.put("/api/contacts/" + contact._id, contact, config)
+            // console.log(res)
+            dispatch({
+                type: UPDATE_CONTACT,
+                payload: res.data
+            })
+        } catch (error) {
+            console.log(error)
+            dispatch({
+                type: "CONTACT_ERROR",
+                payload: error.response.msg
+            })
+        }
+
     }
     const filterContacts = text => {
         dispatch({
@@ -122,7 +149,9 @@ const ContactState = (props) => {
                 filtered: state.filtered,
                 filterContacts,
                 clearFilter,
-                getContacts
+                getContacts,
+                clearContacts
+
             }
         } > {
             props.children
